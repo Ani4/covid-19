@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import moment from "moment";
 import {
   Paper,
   Button,
@@ -12,7 +13,8 @@ import {
   MenuItem,
   ButtonGroup,
   Typography,
-  Toolbar
+  Toolbar,
+  CircularProgress
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles } from "@material-ui/core/styles";
@@ -92,24 +94,32 @@ export default props => {
   const [defaultCountry, setDefaultCountry] = useState(null);
   const [url, setUrl] = useState("https://covid19.mathdro.id/api");
   let countriesUrl = "https://covid19.mathdro.id/api/countries";
+  const [countryName, setCountryName] = useState("WORLD");
 
   useEffect(() => {
-    axios.get(url).then(result => setData(result.data));
+    axios.get(url).then(result => {
+      setData(result.data);
+      console.log(result.data);
+    });
   }, [url]);
   useEffect(() => {
     axios.get(countriesUrl).then(result => {
-      let data = Object.entries(result.data.countries);
+      let data = result.data.countries;
 
       setCountry(data);
-      setDefaultCountry(data.filter(item => trendCountry.includes(item[0])));
+      setDefaultCountry(data.filter(item => trendCountry.includes(item.name)));
+      console.log(data.filter(item => trendCountry.includes(item.name)));
     });
   }, []);
 
   const handleChange = e => {
-    console.log(e);
-    setUrl(`https://covid19.mathdro.id/api/countries/${e}`);
+    e = JSON.parse(e);
+    console.log(e.name);
+    setCountryName(e.name.toUpperCase());
+    setUrl(`https://covid19.mathdro.id/api/countries/${e.iso3}`);
     setData(null);
   };
+
   return (
     <>
       <AppBar position="static">
@@ -133,9 +143,9 @@ export default props => {
                   <em>None</em>
                 </MenuItem>
                 {country ? (
-                  country.map((item, i) => (
-                    <MenuItem value={item[1]} key={i}>
-                      {item[0]}
+                  country.map(item => (
+                    <MenuItem value={JSON.stringify(item)} key={item.name}>
+                      {item.name}
                     </MenuItem>
                   ))
                 ) : (
@@ -158,11 +168,12 @@ export default props => {
         {defaultCountry ? (
           defaultCountry.map((item, i) => (
             <Button
+              key={i}
               variant="outlined"
               style={{ margin: "5px" }}
-              onClick={() => handleChange(item[1])}
+              onClick={() => handleChange(JSON.stringify(item))}
             >
-              {item[0]}
+              {item.name}
             </Button>
           ))
         ) : (
@@ -171,6 +182,18 @@ export default props => {
       </MyGrid>
 
       <MyGrid>
+        {data ? (
+          <>
+            {" "}
+            <h2 style={{ color: "#3f51b5" }}>{`${countryName}`}</h2>
+            <p>{`Last Update: ${moment(new Date(data.lastUpdate)).format(
+              "llll"
+            )}`}</p>
+          </>
+        ) : (
+          <CircularProgress />
+        )}
+
         <Confirmed
           elevation={3}
           children={
