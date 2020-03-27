@@ -19,36 +19,9 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles } from "@material-ui/core/styles";
 
-const Confirmed = styled(Paper)({
-  background: "linear-gradient(to right, #2980b9, #6dd5fa)",
-  border: 0,
-  borderRadius: 3,
-  boxShadow: "0 3px 5px 2px #6dd5fa",
-  color: "white",
-  height: "auto",
-  padding: "30px 30px",
-  margin: "2rem"
-});
-const Recovered = styled(Paper)({
-  background: "linear-gradient(to right, #56ab2f, #a8e063)",
-  border: 0,
-  borderRadius: 3,
-  boxShadow: "0 3px 5px 2px #a8e063",
-  color: "white",
-  height: "auto",
-  padding: "30px 30px",
-  margin: "2rem"
-});
-const Deaths = styled(Paper)({
-  background: "linear-gradient(to right, #cb2d3e, #ef473a)",
-  border: 0,
-  borderRadius: 3,
-  boxShadow: "0 3px 5px 2px #e3828b",
-  color: "white",
-  height: "auto",
-  padding: "30px 30px",
-  margin: "2rem"
-});
+import DataShow from "./DataShow";
+import TableShow from "./TableShow";
+
 const MyGrid = styled(Grid)({
   margin: "3rem",
   alignItems: "center",
@@ -110,12 +83,19 @@ export default props => {
       setDefaultCountry(data.filter(item => trendCountry.includes(item.name)));
       console.log(data.filter(item => trendCountry.includes(item.name)));
     });
+  }, [setCountry]);
+
+  const [fullData, setFullData] = useState(null);
+  useEffect(() => {
+    axios
+      .get(`https://pomber.github.io/covid19/timeseries.json`)
+      .then(result => setFullData(result.data));
   }, []);
 
   const handleChange = e => {
     e = JSON.parse(e);
     console.log(e.name);
-    setCountryName(e.name.toUpperCase());
+    setCountryName(e.name);
     setUrl(`https://covid19.mathdro.id/api/countries/${e.iso3}`);
     setData(null);
   };
@@ -165,27 +145,12 @@ export default props => {
         </Toolbar>
       </AppBar>
       <MyGrid>
-        {defaultCountry ? (
-          defaultCountry.map((item, i) => (
-            <Button
-              key={i}
-              variant="outlined"
-              style={{ margin: "5px" }}
-              onClick={() => handleChange(JSON.stringify(item))}
-            >
-              {item.name}
-            </Button>
-          ))
-        ) : (
-          <></>
-        )}
-      </MyGrid>
-
-      <MyGrid>
         {data ? (
           <>
             {" "}
-            <h2 style={{ color: "#3f51b5" }}>{`${countryName}`}</h2>
+            <h2
+              style={{ color: "#3f51b5" }}
+            >{`${countryName.toUpperCase()}`}</h2>
             <p>{`Last Update: ${moment(new Date(data.lastUpdate)).format(
               "llll"
             )}`}</p>
@@ -194,45 +159,30 @@ export default props => {
           <CircularProgress />
         )}
 
-        <Confirmed
-          elevation={3}
-          children={
-            !data ? (
-              <LinearProgress />
-            ) : (
-              <div className="confirmed">
-                <h2>CONFIRMED : </h2>
-                <h3>{data.confirmed.value}</h3>
-              </div>
-            )
-          }
-        />
-        <Recovered
-          elevation={3}
-          children={
-            !data ? (
-              <LinearProgress />
-            ) : (
-              <div className="recovered">
-                <h2>RECOVERED : </h2>
-                <h3>{data.recovered.value}</h3>
-              </div>
-            )
-          }
-        />
-        <Deaths
-          elevation={3}
-          children={
-            !data ? (
-              <LinearProgress />
-            ) : (
-              <div className="deaths">
-                <h2>DEATHS : </h2>
-                <h3>{data.deaths.value}</h3>
-              </div>
-            )
-          }
-        />
+        {/* DATA CARD  */}
+        <DataShow data={data} />
+
+        {/* TABLE RENDER */}
+        {countryName !== "WORLD" ? (
+          <TableShow selectedData={fullData} selectCon={countryName} />
+        ) : null}
+      </MyGrid>
+      <MyGrid>
+        {defaultCountry ? (
+          defaultCountry.map((item, i) => (
+            <Button
+              key={i}
+              variant="outlined"
+              mn
+              style={{ margin: "5px" }}
+              onClick={() => handleChange(JSON.stringify(item))}
+            >
+              {item.name.toUpperCase()}
+            </Button>
+          ))
+        ) : (
+          <></>
+        )}
       </MyGrid>
     </>
   );
