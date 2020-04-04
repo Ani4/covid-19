@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
+import { Skeleton } from "@material-ui/lab";
 import {
-  Paper,
   Button,
   styled,
   Grid,
-  LinearProgress,
   InputLabel,
   Select,
   AppBar,
   MenuItem,
-  ButtonGroup,
   Typography,
   Toolbar,
-  CircularProgress
 } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
+
 import { makeStyles } from "@material-ui/core/styles";
 
 import DataShow from "./DataShow";
@@ -26,18 +23,18 @@ const MyGrid = styled(Grid)({
   margin: "3rem",
   alignItems: "center",
   justifyContent: "center",
-  flexWrap: "wrap"
+  flexWrap: "wrap",
 });
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   title: {
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 }));
 const trendCountry = [
   "India",
@@ -56,9 +53,9 @@ const trendCountry = [
   "UK",
   "Singapore",
   "Philippines",
-  "United Kingdom"
+  "United Kingdom",
 ];
-export default props => {
+export default (props) => {
   const classes = useStyles();
   const [data, setData] = useState(null);
   const [country, setCountry] = useState(null);
@@ -70,18 +67,20 @@ export default props => {
   const [countryName, setCountryName] = useState("WORLD");
 
   useEffect(() => {
-    axios.get(url).then(result => {
+    axios.get(url).then((result) => {
       setData(result.data);
       console.log(result.data);
     });
   }, [url]);
   useEffect(() => {
-    axios.get(countriesUrl).then(result => {
+    axios.get(countriesUrl).then((result) => {
       let data = result.data.countries;
 
       setCountry(data);
-      setDefaultCountry(data.filter(item => trendCountry.includes(item.name)));
-      console.log(data.filter(item => trendCountry.includes(item.name)));
+      setDefaultCountry(
+        data.filter((item) => trendCountry.includes(item.name))
+      );
+      console.log(data.filter((item) => trendCountry.includes(item.name)));
     });
   }, [setCountry]);
 
@@ -89,10 +88,10 @@ export default props => {
   useEffect(() => {
     axios
       .get(`https://pomber.github.io/covid19/timeseries.json`)
-      .then(result => setFullData(result.data));
+      .then((result) => setFullData(result.data));
   }, []);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     e = JSON.parse(e);
     console.log(e.name);
     setCountryName(e.name);
@@ -117,19 +116,24 @@ export default props => {
                 labelId="label"
                 id="select"
                 defaultValue=""
-                onChange={e => handleChange(e.target.value)}
+                onChange={(e) => handleChange(e.target.value)}
               >
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
                 {country ? (
-                  country.map(item => (
+                  country.map((item) => (
                     <MenuItem value={JSON.stringify(item)} key={item.name}>
                       {item.name}
                     </MenuItem>
                   ))
                 ) : (
-                  <></>
+                  <Skeleton
+                    animation="wave"
+                    variant="circle"
+                    width={40}
+                    height={40}
+                  />
                 )}
               </Select>
             </div>
@@ -156,16 +160,25 @@ export default props => {
             )}`}</p>
           </>
         ) : (
-          <CircularProgress />
+          <Skeleton animation="wave" variant="rect" width={400} height={60} />
         )}
 
         {/* DATA CARD  */}
         <DataShow data={data} />
 
         {/* TABLE RENDER */}
-        {countryName !== "WORLD" ? (
-          <TableShow selectedData={fullData} selectCon={countryName} />
-        ) : null}
+        {data ? (
+          countryName !== "WORLD" ? (
+            <TableShow selectedData={fullData} selectCon={countryName} />
+          ) : null
+        ) : (
+          <Skeleton
+            animation="wave"
+            variant="rect"
+            width="90vw"
+            height="50vh"
+          />
+        )}
       </MyGrid>
       <MyGrid>
         {defaultCountry ? (
@@ -181,7 +194,7 @@ export default props => {
             </Button>
           ))
         ) : (
-          <></>
+          <Skeleton animation="wave" variant="rect" width={400} height={60} />
         )}
       </MyGrid>
     </>

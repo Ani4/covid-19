@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import moment from "moment";
 import { Paper, styled, Grid, LinearProgress } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
-import { makeStyles } from "@material-ui/core/styles";
+import { Skeleton } from "@material-ui/lab";
 
 const Confirmed = styled(Paper)({
   background: "linear-gradient(to right, #2980b9, #6dd5fa)",
@@ -14,7 +11,7 @@ const Confirmed = styled(Paper)({
   height: window.innerWidth > "400" ? "80px" : "auto",
 
   padding: "20px",
-  margin: "1rem"
+  margin: "1rem",
 });
 const Recovered = styled(Paper)({
   background: "linear-gradient(to right, #56ab2f, #a8e063)",
@@ -25,7 +22,7 @@ const Recovered = styled(Paper)({
   height: window.innerWidth > "400" ? "80px" : "auto",
 
   padding: "20px",
-  margin: "1rem"
+  margin: "1rem",
 });
 const Deaths = styled(Paper)({
   background: "linear-gradient(to right, #cb2d3e, #ef473a)",
@@ -36,19 +33,19 @@ const Deaths = styled(Paper)({
   height: window.innerWidth > "400" ? "80px" : "auto",
 
   padding: "20px",
-  margin: "1rem"
+  margin: "1rem",
 });
 const CardOutter = styled(Grid)({
   spacing: 1,
   xs: 2,
   direction: "row",
   justifyContent: "center",
-  alignItem: "center"
+  alignItem: "center",
 });
 const textCenter = {
-  textAlign: "center"
+  textAlign: "center",
 };
-export default props => {
+export default (props) => {
   return (
     <CardOutter container>
       <Grid item xs={12} sm={4}>
@@ -56,7 +53,12 @@ export default props => {
           elevation={3}
           children={
             !props.data ? (
-              <LinearProgress />
+              <Skeleton
+                animation="wave"
+                variant="rect"
+                width="100%"
+                height="100%"
+              />
             ) : (
               <div className="confirmed">
                 <h2 style={textCenter}>
@@ -72,7 +74,12 @@ export default props => {
           elevation={3}
           children={
             !props.data ? (
-              <LinearProgress />
+              <Skeleton
+                animation="wave"
+                variant="rect"
+                width="100%"
+                height="100%"
+              />
             ) : (
               <div className="recovered">
                 <h2 style={textCenter}>
@@ -88,7 +95,12 @@ export default props => {
           elevation={3}
           children={
             !props.data ? (
-              <LinearProgress />
+              <Skeleton
+                animation="wave"
+                variant="rect"
+                width="100%"
+                height="100%"
+              />
             ) : (
               <div className="deaths">
                 <h2 style={textCenter}>
