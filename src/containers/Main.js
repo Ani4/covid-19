@@ -164,7 +164,11 @@ export default (props) => {
         )}
 
         {/* DATA CARD  */}
-        <DataShow data={data} />
+        {data ? (
+          <DataShow data={data} />
+        ) : (
+          <Skeleton animation="wave" variant="rect" width="100%" height="300" />
+        )}
 
         {/* TABLE RENDER */}
         {data ? (
