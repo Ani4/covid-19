@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { baseUrl } from "./config";
 import {
-    Button,
     FormControl,
     Select,
     MenuItem,
     Card,
+    CardContent,
+    Typography,
 } from "@material-ui/core";
+import Table from "./components/Table";
 import InfoBoxConatiner from "./components/InfoBoxContainer";
 import "./App.css";
+import Graph from "./components/Graph";
 
 function App() {
     const [countries, setCountries] = useState([]);
     const [country, setCountry] = useState("all");
+    const [tableData, setTableData] = useState([]);
 
     useEffect(() => {
         const switchCountry = async () => {
@@ -23,6 +27,7 @@ function App() {
                         name: country.country,
                         value: country.countryInfo.iso2,
                     }));
+                    setTableData(res);
                     setCountries(countries);
                 });
         };
@@ -58,7 +63,14 @@ function App() {
                 <InfoBoxConatiner country={country} />
                 <div className="map">IM THE MAP</div>
             </div>
-            <Card className="app__right"></Card>
+            <Card className="app__right">
+                <CardContent>
+                    <h2>Live country Data</h2>
+                    <Table countries={tableData} />
+                    <h2>Graph Data</h2>
+                    <Graph country={country} />
+                </CardContent>
+            </Card>
         </div>
     );
 }

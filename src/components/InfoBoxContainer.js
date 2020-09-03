@@ -27,17 +27,17 @@ export default function InfoBoxContainer({ country }) {
         <div className="infoBox__stats">
             <InfoBox
                 title="Coronavirus Cases"
-                cases={casesDetails.active}
+                cases={casesDetails.todayCases}
                 total={casesDetails.cases}
             />
             <InfoBox
                 title="Recovered"
-                cases={casesDetails.recovered}
+                cases={casesDetails.todayRecovered}
                 total={casesDetails.recovered}
             />
             <InfoBox
                 title="Deaths"
-                cases={casesDetails.deaths}
+                cases={casesDetails.todayDeaths}
                 total={casesDetails.deaths}
             />
         </div>

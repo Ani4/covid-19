@@ -4,6 +4,14 @@
 body {
     background-color: #f5f6f7;
 }
+.app {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 20px;
+}
+.app__left {
+    flex: 0.8;
+}
 .app__header {
     display: flex;
     align-items: center;
@@ -15,3 +23,9 @@ body {
     display: flex;
     justify-content: space-between;
 }
+
+@media (max-width: 960px) {
+    .app {
+        flex-direction: column;
+    }
+} ;
