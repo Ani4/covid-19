@@ -20,6 +20,7 @@ function App() {
     const [tableData, setTableData] = useState([]);
     const [mapCenter, setMapCenter] = useState({ lat: 0, lon: 0 });
     const [zoom, setZoom] = useState(2);
+    const [caseType, setCaseType] = useState("cases");
 
     useEffect(() => {
         const switchCountry = async () => {
@@ -33,6 +34,10 @@ function App() {
                             lat: country.countryInfo.lat,
                             lng: country.countryInfo.long,
                         },
+                        cases: country.cases,
+                        deaths: country.deaths,
+                        recovered: country.recovered,
+                        flag: country.countryInfo.flag,
                     }));
                     setTableData(res);
                     setCountries(countries);
@@ -79,7 +84,12 @@ function App() {
                     </FormControl>
                 </div>
                 <InfoBoxConatiner country={country} />
-                <Map countries={countries} center={mapCenter} zoom={zoom} />
+                <Map
+                    countries={countries}
+                    center={mapCenter}
+                    zoom={zoom}
+                    caseType={caseType}
+                />
             </div>
             <div className="app__right">
                 <Card>
