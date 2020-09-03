@@ -11,12 +11,15 @@ import {
 import Table from "./components/Table";
 import InfoBoxConatiner from "./components/InfoBoxContainer";
 import "./App.css";
+import "leaflet/dist/leaflet.css";
 import Graph from "./components/Graph";
-
+import Map from "./components/Map";
 function App() {
     const [countries, setCountries] = useState([]);
     const [country, setCountry] = useState("all");
     const [tableData, setTableData] = useState([]);
+    const [mapCenter, setMapCenter] = useState({ lat: 0, lon: 0 });
+    const [zoom, setZoom] = useState(2);
 
     useEffect(() => {
         const switchCountry = async () => {
@@ -26,15 +29,30 @@ function App() {
                     const countries = res.map((country) => ({
                         name: country.country,
                         value: country.countryInfo.iso2,
+                        center: {
+                            lat: country.countryInfo.lat,
+                            lng: country.countryInfo.long,
+                        },
                     }));
                     setTableData(res);
                     setCountries(countries);
                 });
         };
         switchCountry();
+        if (country === "all" || country === undefined) {
+            setMapCenter({ lat: 0, lng: 0 });
+            setZoom(2);
+        } else {
+            const countryCoordinate = countries.find(
+                (data) => data.value === country
+            );
+            console.log({ countryCoordinate });
+            setMapCenter(countryCoordinate.center);
+            setZoom(4);
+        }
     }, [country]);
     const handleSwitch = async (event) => {
-        setCountry(event.target.value);
+        setCountry(!event.target.value ? "all" : event.target.value);
     };
 
     return (
@@ -61,16 +79,18 @@ function App() {
                     </FormControl>
                 </div>
                 <InfoBoxConatiner country={country} />
-                <div className="map">IM THE MAP</div>
+                <Map countries={countries} center={mapCenter} zoom={zoom} />
             </div>
-            <Card className="app__right">
-                <CardContent>
-                    <h2>Live country Data</h2>
-                    <Table countries={tableData} />
-                    <h2>Graph Data</h2>
-                    <Graph country={country} />
-                </CardContent>
-            </Card>
+            <div className="app__right">
+                <Card>
+                    <CardContent>
+                        <h2>Live country Data</h2>
+                        <Table countries={tableData} />
+                        <h2>Graph Data</h2>
+                        <Graph country={country} />
+                    </CardContent>
+                </Card>
+            </div>
         </div>
     );
 }

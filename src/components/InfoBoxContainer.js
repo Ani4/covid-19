@@ -9,9 +9,9 @@ export default function InfoBoxContainer({ country }) {
             let res;
             console.log(country);
             if (country === "all")
-                res = await fetch(`${baseUrl}/${country}`).then((res) =>
-                    res.json()
-                );
+                res = await fetch(
+                    `${baseUrl}/${!country ? "all" : country}`
+                ).then((res) => res.json());
             else {
                 res = await fetch(
                     `${baseUrl}/countries/${country}`
