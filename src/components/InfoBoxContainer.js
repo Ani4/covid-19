@@ -4,6 +4,7 @@ import { baseUrl } from "../config";
 import "../styles/infobox.css";
 
 export default function InfoBoxContainer({ country, setCaseType }) {
+    const [active, setActive] = useState(0);
     const [casesDetails, setCasesDetails] = useState({});
     useEffect(() => {
         const fetchCountryDetails = async () => {
@@ -27,42 +28,67 @@ export default function InfoBoxContainer({ country, setCaseType }) {
     return (
         <div className="infoBox__stats">
             <InfoBox
-                title="Coronavirus Cases"
+                title="Confirmed Cases"
                 cases={casesDetails.todayCases}
                 total={casesDetails.cases}
                 type="cases"
                 setCaseType={setCaseType}
+                activeNo={0}
+                setActive={setActive}
+                activeStyle={active === 0 ? "infoBox--selected" : ""}
             />
             <InfoBox
-                title="Recovered"
+                title="Recovered Cases"
                 cases={casesDetails.todayRecovered}
                 total={casesDetails.recovered}
                 type="recovered"
                 setCaseType={setCaseType}
+                activeNo={1}
+                setActive={setActive}
+                activeStyle={active === 1 ? "infoBox--selected" : ""}
             />
             <InfoBox
-                title="Deaths"
+                title="Deaths Cases"
                 cases={casesDetails.todayDeaths}
                 total={casesDetails.deaths}
                 type="deaths"
                 setCaseType={setCaseType}
+                activeNo={2}
+                setActive={setActive}
+                activeStyle={active === 2 ? "infoBox--selected" : ""}
             />
         </div>
     );
 }
 
-function InfoBox({ title, cases, total, type, setCaseType }) {
+function InfoBox({
+    title,
+    cases,
+    total,
+    type,
+    setCaseType,
+    setActive,
+    activeStyle,
+    activeNo,
+}) {
     return (
-        <Card className="infoBox" onClick={() => setCaseType(type)}>
+        <Card
+            className={`infoBox infoBox__${type} ${activeStyle}`}
+            style={{ borderTop: "10px" }}
+            onClick={() => {
+                setCaseType(type);
+                setActive(activeNo);
+            }}
+        >
             <CardContent>
                 <Typography className="infoBox__title" color="textSecondary">
                     {title}
                 </Typography>
-                <h2 className={`infoBox__cases infoBox__${type}`}>
+                <h2 className={`infoBox__header__${type}`}>
                     {cases > 0 ? "+" : ""}
                     {cases}
                 </h2>
-                <Typography color="textSecondary">{total} Total</Typography>
+                <Typography color="textSecondary">{total}</Typography>
             </CardContent>
         </Card>
     );

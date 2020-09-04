@@ -1,11 +1,11 @@
 import React from "react";
 import "../styles/table.css";
-export default function Table({ countries }) {
+export default function Table({ countries, caseType }) {
     let count = 1;
     return (
         <div className="table">
             {countries
-                .sort((one, two) => two.cases - one.cases)
+                .sort((one, two) => two[caseType] - one[caseType])
                 .map((country) => (
                     <tr>
                         <td>
@@ -17,7 +17,7 @@ export default function Table({ countries }) {
                         <td> {country.country}</td>
 
                         <td>
-                            <strong>{country.cases}</strong>
+                            <strong>{country[caseType]}</strong>
                         </td>
                     </tr>
                 ))}

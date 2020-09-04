@@ -3,7 +3,13 @@ import { baseUrl } from "../config";
 import { Line } from "react-chartjs-2";
 import numeral from "numeral";
 import { casesTypeColors } from "../util";
+import { FormControl, Select, MenuItem } from "@material-ui/core";
 const options = {
+    height: 150,
+    width: 200,
+    padding: 10,
+    responsive: true,
+    maintainAspectRatio: true,
     legend: {
         display: false,
     },
@@ -13,7 +19,6 @@ const options = {
         },
     },
 
-    maintainAspectRatio: false,
     tooltips: {
         mode: "index",
         intersect: false,
@@ -71,6 +76,7 @@ const buildChartData = (data, caseType) => {
 export default function Graph({ country, caseType }) {
     const [countryData, setCountryData] = useState({});
     const [days, setDays] = useState(30);
+
     const [data, setData] = useState();
 
     const fetchTimeline = async () => {
@@ -92,26 +98,51 @@ export default function Graph({ country, caseType }) {
 
     useEffect(() => {
         fetchTimeline();
-    }, [country, caseType]);
+    }, [country, caseType, days]);
 
     return (
-        <div>
-            {country && country === "all" ? "WorldWide" : country}
-            {data && (
-                <Line
-                    options={options}
-                    data={{
-                        datasets: [
-                            {
-                                backgroundColor:
-                                    casesTypeColors[caseType].rgba,
-                                borderColor: casesTypeColors[caseType].hex,
-                                data: data,
-                            },
-                        ],
-                    }}
-                />
-            )}
-        </div>
+        <>
+            <div className="graph__header">
+                <h2>
+                    {country && country === "all"
+                        ? "WorldWide"
+                        : countryData.country}{" "}
+                </h2>
+                <FormControl>
+                    <Select
+                        value={days}
+                        variant="standard"
+                        onClick={(e) => {
+                            setDays(e.target.value);
+                        }}
+                    >
+                        <MenuItem value={"30"}>1 Month</MenuItem>
+                        <MenuItem value={"60"}>2 Month</MenuItem>
+                        <MenuItem value={"90"}>3 Month</MenuItem>
+                        <MenuItem value={"120"}>4 Month</MenuItem>
+                        <MenuItem value={"150"}>5 Month</MenuItem>
+                        <MenuItem value={"180"}>6 Month</MenuItem>
+                        <MenuItem value={"360"}>1 Year</MenuItem>
+                    </Select>
+                </FormControl>
+            </div>
+            <div>
+                {data && (
+                    <Line
+                        options={options}
+                        data={{
+                            datasets: [
+                                {
+                                    backgroundColor:
+                                        casesTypeColors[caseType].rgba,
+                                    borderColor: casesTypeColors[caseType].hex,
+                                    data: data,
+                                },
+                            ],
+                        }}
+                    />
+                )}
+            </div>
+        </>
     );
 }

@@ -6,7 +6,6 @@ import {
     MenuItem,
     Card,
     CardContent,
-    Typography,
 } from "@material-ui/core";
 import Table from "./components/Table";
 import InfoBoxConatiner from "./components/InfoBoxContainer";
@@ -95,11 +94,14 @@ function App() {
                 />
             </div>
             <div className="app__right">
-                <Card>
+                <Card className="right__content">
                     <CardContent>
-                        <h2>Live country Data</h2>
-                        <Table countries={tableData} />
-                        <h2>Graph Data</h2>
+                        <h2>Every Countries</h2>
+                        <Table countries={tableData} caseType={caseType} />
+                    </CardContent>
+                </Card>
+                <Card className="right__content">
+                    <CardContent>
                         <Graph country={country} caseType={caseType} />
                     </CardContent>
                 </Card>

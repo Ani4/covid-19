@@ -14,7 +14,7 @@ export const casesTypeColors = {
         rgba: "rgba(125,215,29,0.5)",
     },
     deaths: {
-        hex: "#fb443",
+        hex: "rgba(0,0,0,0.5)",
         multipler: 2000,
         rgba: "rgba(0,0,0,0.5)",
     },
