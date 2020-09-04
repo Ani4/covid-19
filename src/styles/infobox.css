@@ -10,3 +10,7 @@
 .infoBox:not(:last-child) {
     margin-right: 1rem;
 }
+
+.infoBox__cases {
+    font-size: 1.3rem;
+}

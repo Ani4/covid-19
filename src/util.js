@@ -1,18 +1,22 @@
 import React from "react";
 import { Circle, Popup } from "react-leaflet";
 import numeral from "numeral";
-let casesTypeColors = {
+
+export const casesTypeColors = {
     cases: {
         hex: "#cc1034",
         multipler: 800,
+        rgba: " rgba(204, 16, 52, 0.5)",
     },
     recovered: {
         hex: "#7dd71d",
         multipler: 1200,
+        rgba: "rgba(125,215,29,0.5)",
     },
     deaths: {
         hex: "#fb443",
         multipler: 2000,
+        rgba: "rgba(0,0,0,0.5)",
     },
 };
 export const showDataOnMap = (data, caseType = "cases") => {

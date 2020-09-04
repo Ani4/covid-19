@@ -45,8 +45,8 @@ function App() {
         };
         switchCountry();
         if (country === "all" || country === undefined) {
-            setMapCenter({ lat: 0, lng: 0 });
-            setZoom(2);
+            setMapCenter({ lat: 35, lng: 35 });
+            setZoom(1.5);
         } else {
             const countryCoordinate = countries.find(
                 (data) => data.value === country
@@ -83,7 +83,10 @@ function App() {
                         </Select>
                     </FormControl>
                 </div>
-                <InfoBoxConatiner country={country} />
+                <InfoBoxConatiner
+                    country={country}
+                    setCaseType={setCaseType}
+                />
                 <Map
                     countries={countries}
                     center={mapCenter}
@@ -97,7 +100,7 @@ function App() {
                         <h2>Live country Data</h2>
                         <Table countries={tableData} />
                         <h2>Graph Data</h2>
-                        <Graph country={country} />
+                        <Graph country={country} caseType={caseType} />
                     </CardContent>
                 </Card>
             </div>

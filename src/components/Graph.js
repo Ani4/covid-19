@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { baseUrl } from "../config";
 import { Line } from "react-chartjs-2";
 import numeral from "numeral";
+import { casesTypeColors } from "../util";
 const options = {
     legend: {
         display: false,
@@ -11,6 +12,7 @@ const options = {
             radius: 0,
         },
     },
+
     maintainAspectRatio: false,
     tooltips: {
         mode: "index",
@@ -21,12 +23,13 @@ const options = {
             },
         },
     },
+
     scales: {
         xAxes: [
             {
                 type: "time",
                 time: {
-                    format: "MM/DD/YY",
+                    parser: false,
                     tooltipsFormat: "ll",
                 },
             },
@@ -46,48 +49,50 @@ const options = {
     },
 };
 
+const buildChartData = (data, caseType) => {
+    const chartData = [];
+    let lastDataPoint;
+
+    for (const date in data[caseType]) {
+        if (lastDataPoint) {
+            const newDataPoint = {
+                x: date,
+                y: data[caseType][date] - lastDataPoint,
+            };
+            chartData.push(newDataPoint);
+        }
+        lastDataPoint = data[caseType][date];
+    }
+    return chartData;
+};
+
 // https://disease.sh/v3/covid-19/historical/in?lastdays=300
-export default function Graph({ country }) {
+
+export default function Graph({ country, caseType }) {
     const [countryData, setCountryData] = useState({});
-    const [days, setDays] = useState(360);
+    const [days, setDays] = useState(30);
     const [data, setData] = useState();
 
-    const buildChartData = (data, caseType = "cases") => {
-        const chartData = [];
-        let lastDataPoint;
+    const fetchTimeline = async () => {
+        let chartData = [];
 
-        for (const date in data[caseType]) {
-            if (lastDataPoint) {
-                const newDataPoint = {
-                    x: date,
-                    y: data["cases"][date] - lastDataPoint,
-                };
-                chartData.push(newDataPoint);
-            }
-            lastDataPoint = data["cases"][date];
+        const data = await fetch(
+            `${baseUrl}/historical/${
+                !country ? "all" : country
+            }?lastdays=${days}`
+        ).then((res) => res.json());
+        setCountryData(data);
+        if (country === "all" || country === undefined) {
+            chartData = buildChartData(data, caseType);
+        } else {
+            chartData = buildChartData(data.timeline, caseType);
         }
-        return chartData;
+        setData(chartData);
     };
 
     useEffect(() => {
-        const fetchTimeline = async () => {
-            let chartData = [];
-
-            const data = await fetch(
-                `${baseUrl}/historical/${
-                    !country ? "all" : country
-                }?lastdays=${days}`
-            ).then((res) => res.json());
-            setCountryData(data);
-            if (country === "all" || country === undefined) {
-                chartData = buildChartData(data);
-            } else {
-                chartData = buildChartData(data.timeline);
-            }
-            setData(chartData);
-        };
         fetchTimeline();
-    }, [country]);
+    }, [country, caseType]);
 
     return (
         <div>
@@ -98,8 +103,9 @@ export default function Graph({ country }) {
                     data={{
                         datasets: [
                             {
-                                backgroundColor: "rgba(204, 16, 52, 0.5)",
-                                borderColor: "#CC1034",
+                                backgroundColor:
+                                    casesTypeColors[caseType].rgba,
+                                borderColor: casesTypeColors[caseType].hex,
                                 data: data,
                             },
                         ],

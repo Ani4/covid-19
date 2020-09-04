@@ -24,4 +24,8 @@ body {
     .app {
         flex-direction: column;
     }
-} ;
+}
+canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
