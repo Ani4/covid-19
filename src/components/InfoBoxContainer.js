@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, Typography } from "@material-ui/core";
 import { baseUrl } from "../config";
+import "../styles/infobox.css";
 
 export default function InfoBoxContainer({ country }) {
     const [casesDetails, setCasesDetails] = useState({});
@@ -46,12 +47,15 @@ export default function InfoBoxContainer({ country }) {
 
 function InfoBox({ title, cases, total }) {
     return (
-        <Card>
+        <Card className="infoBox">
             <CardContent>
                 <Typography className="infoBox__title" color="textSecondary">
                     {title}
                 </Typography>
-                <h2 className="infoBox__cases">{cases}</h2>
+                <h2 className="infoBox__cases">
+                    {cases > 0 ? "+" : ""}
+                    {cases}
+                </h2>
                 <Typography color="textSecondary">{total} Total</Typography>
             </CardContent>
         </Card>

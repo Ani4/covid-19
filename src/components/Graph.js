@@ -78,12 +78,10 @@ export default function Graph({ country }) {
                     !country ? "all" : country
                 }?lastdays=${days}`
             ).then((res) => res.json());
+            setCountryData(data);
             if (country === "all" || country === undefined) {
-                console.log(country, data);
                 chartData = buildChartData(data);
             } else {
-                console.log(country, data.timeline);
-
                 chartData = buildChartData(data.timeline);
             }
             setData(chartData);
@@ -93,7 +91,7 @@ export default function Graph({ country }) {
 
     return (
         <div>
-            <h1>im graph</h1>
+            {country && country === "all" ? "WorldWide" : country}
             {data && (
                 <Line
                     options={options}

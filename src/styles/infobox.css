@@ -1,0 +1,12 @@
+.infoBox__stats {
+    display: flex;
+
+    justify-content: space-between;
+}
+
+.infoBox {
+    flex: 1;
+}
+.infoBox:not(:last-child) {
+    margin-right: 1rem;
+}

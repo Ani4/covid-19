@@ -20,11 +20,6 @@ body {
     justify-content: space-between;
 }
 
-.infoBox__stats {
-    display: flex;
-    justify-content: space-between;
-}
-
 @media (max-width: 960px) {
     .app {
         flex-direction: column;
