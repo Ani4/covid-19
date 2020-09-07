@@ -56,7 +56,9 @@ function App() {
         }
     }, [country]);
     const handleSwitch = async (event) => {
-        setCountry(!event.target.value ? "all" : event.target.value);
+        setCountry((country) =>
+            !event.target.value ? country : event.target.value
+        );
     };
 
     return (
