@@ -43,6 +43,12 @@ body {
         flex-direction: column;
     }
 }
+@media (max-width: 480px) {
+    .app {
+        margin: 0;
+        padding: 0;
+    }
+}
 
 .right__content {
     border-radius: 1rem !important;
