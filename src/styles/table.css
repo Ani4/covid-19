@@ -1,0 +1,33 @@
+.table {
+    margin: 1rem 0;
+    overflow: scroll;
+    height: 360px;
+    color: #666666;
+    background-color: #f9f9f9;
+}
+
+.table span {
+    padding-right: 0.5rem;
+}
+
+.table td {
+    padding: 0.5rem;
+}
+.table img {
+    height: 1rem;
+}
+
+.table tr:nth-child(odd) {
+    background-color: #dee6e7;
+}
+
+.table tr {
+    display: flex;
+    justify-content: space-between;
+}
+
+.table tr td:first-child {
+    display: flex;
+    justify-content: space-between;
+    width: 5rem;
+}

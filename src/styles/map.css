@@ -1,0 +1,57 @@
+.map {
+    height: 500px;
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+    margin-top: 1rem;
+    box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
+}
+
+.map .leaflet-container {
+    height: 100%;
+}
+.popup__flag img {
+    width: 100px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+
+.popup__flag {
+    height: 100px;
+    width: 100%;
+    background-size: cover;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+}
+
+.popup__container {
+    width: 150px;
+}
+
+.popup__name {
+    font-size: 1.2rem;
+    text-decoration-line: underline;
+    -moz-text-decoration-line: underline;
+}
+.popup__confirmed {
+    color: skyblue;
+    font-size: 1rem;
+}
+.popup__recovered {
+    font-size: 1rem;
+    color: yellowgreen;
+}
+.popup__deaths {
+    font-size: 1rem;
+    color: orangered;
+}
